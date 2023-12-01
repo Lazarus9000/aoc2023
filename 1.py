@@ -45,7 +45,15 @@ while readcount < len(input) :
         lastnum = 0
         
         #Issue is that the end of "one" can overlap "eight", two and one, three and eight, etc. code below doesnt handle this
-        input[readcount] = input[readcount].replace('eight', '8')
+        input[readcount] = input[readcount].replace('oneight', '18')
+        input[readcount] = input[readcount].replace('twone', '21')
+        input[readcount] = input[readcount].replace('threeight', '38')
+        input[readcount] = input[readcount].replace('fiveight', '58')
+        input[readcount] = input[readcount].replace('sevenine', '79')
+        input[readcount] = input[readcount].replace('eighthree', '83')
+        input[readcount] = input[readcount].replace('eightwo', '82')
+        input[readcount] = input[readcount].replace('nineight', '98')
+        
         input[readcount] = input[readcount].replace('one', '1')
         input[readcount] = input[readcount].replace('two', '2')
         input[readcount] = input[readcount].replace('three', '3')
@@ -53,7 +61,7 @@ while readcount < len(input) :
         input[readcount] = input[readcount].replace('five', '5')
         input[readcount] = input[readcount].replace('six', '6')
         input[readcount] = input[readcount].replace('seven', '7')
-        
+        input[readcount] = input[readcount].replace('eight', '8')
         input[readcount] = input[readcount].replace('nine', '9')
         
         for element in input[readcount]:
