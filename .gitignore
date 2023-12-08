@@ -1,3 +1,6 @@
+# ignore input files for aoc
+*.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
