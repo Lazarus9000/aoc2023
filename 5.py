@@ -20,6 +20,7 @@ for input in inputs:
         print(mapping)
         
         seedmap = [0] * len(seeds)
+        
         for s in range(len(seeds)):
             for mapvals in mapping:
                 values = mapvals.split()
@@ -36,6 +37,84 @@ print("day 5 - 1")
 
 minseed = seeds[0]
 for seed in seeds:
+    if seed < minseed:
+        minseed = seed
+
+print(minseed)
+
+
+mapping = []
+seeds = []
+initseeds = []
+mapz = []
+for input in inputs:
+    fields = input.split()
+    #print(fields)
+    if(fields[0] == "seeds:"):
+            initseeds = fields[1:]
+            initseeds = list(map(int, initseeds))
+            print(initseeds)
+            s = 0
+            #while s < len(initseeds):
+                #for i in range(initseeds[s],initseeds[s]+initseeds[s+1]):
+                    #print(i)
+                    #seeds.append(i)
+                #s = s + 2
+            #print(seeds)
+    else:
+        mapping = []
+        maps = input.split("\n")
+        #print(maps[0])
+        for j in range(len(maps[1:])):
+            mapping.append(list(map(int,maps[j+1].split())))
+        #print(mapping)
+        mapz.append(mapping)
+
+#print(mapz)
+minseeds = []
+z = 0
+while z < len(initseeds):
+    seeds = []
+    for i in range(initseeds[z],initseeds[z]+initseeds[z+1]):
+        #
+        
+        seeds.append(i)
+
+    print(str(z) + " - " + str(len(initseeds)) + " - " + str(initseeds[z]) + " - " + str(initseeds[z]+initseeds[z+1]))
+    #print(seeds)
+    
+    
+    for mapping in mapz:
+        seedmap = [0] * len(seeds)
+        print("map: " + str(mapping))
+        
+        for s in range(len(seeds)):
+            for mapvals in mapping:
+                #values = mapvals.split()
+                #print(values)
+                #values = list(map(int, values))
+                #print(str(values[1]))
+                if seedmap[s] != -1:
+                    if seeds[s] >= mapvals[1]:
+                        if mapvals[1]+mapvals[2] > seeds[s]:
+                            
+                            seeds[s] = int(seeds[s]) - (mapvals[1]-mapvals[0])
+                            seedmap[s] = -1
+                    #print("value map! " + str(seeds[s]) + " - " + mapvals)
+                
+    minseed = seeds[0]
+    for seed in seeds:
+        if seed < minseed:
+            minseed = seed
+    minseeds.append(minseed)
+    print(minseeds)
+    z = z + 2 
+    #print(seeds)
+    
+print("day 5 - 2")
+
+minseed = minseeds[0]
+for seed in minseeds:
     if seed < minseed:
         minseed = seed
 
