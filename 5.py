@@ -72,12 +72,14 @@ for input in inputs:
 
 #print(mapz)
 minseeds = []
-z = 0
+z = 4
 while z < len(initseeds):
     seeds = []
-    for i in range(initseeds[z],initseeds[z]+initseeds[z+1]):
-        #
-        
+    #seeds.append(list(range(initseeds[z], initseeds[z]+initseeds[z+1])))
+    
+    seedrange = range(initseeds[z],initseeds[z]+initseeds[z+1])
+    
+    for i in seedrange:    
         seeds.append(i)
 
     print(str(z) + " - " + str(len(initseeds)) + " - " + str(initseeds[z]) + " - " + str(initseeds[z]+initseeds[z+1]))
@@ -96,7 +98,7 @@ while z < len(initseeds):
                 #print(str(values[1]))
                 if seedmap[s] != -1:
                     if seeds[s] >= mapvals[1]:
-                        if mapvals[1]+mapvals[2] > seeds[s]:
+                        if seeds[s] < mapvals[1]+mapvals[2]:
                             
                             seeds[s] = int(seeds[s]) - (mapvals[1]-mapvals[0])
                             seedmap[s] = -1
