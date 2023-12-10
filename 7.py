@@ -19,15 +19,41 @@ def fiveofakind(hand):
 def xofakind(hand, count):
     countsum = []
     countresult = False
-    
+
     for i in range(len(hand)):
         countsum.append(0)
+        
         for card in hand:
             if hand[i] == card:
                 countsum[i] += 1
+            
     
     for card in countsum:
         if card == count:
+            countresult = True
+    
+    return countresult
+
+def xofakindjoker(hand, count):
+    countsum = []
+    countresult = False
+    countjoker = 0
+    for i in range(len(hand)):
+        countsum.append(0)
+        
+        if hand[i] == "J":
+                #print("Joker")
+                countjoker += 1
+                #print(countjoker)
+        else:
+        
+            for card in hand:
+                if hand[i] == card:
+                    countsum[i] += 1
+                
+    
+    for card in countsum:
+        if card + countjoker == count:
             countresult = True
     
     return countresult
@@ -37,6 +63,33 @@ def ishouse(hand):
         return True
     else:
         return False
+
+def ishousejoker(hand):
+    countsum = []
+    countresult = False
+    countjoker = 0
+    for i in range(len(hand)):
+        countsum.append(0)
+        
+        if hand[i] == "J":
+                #print("Joker")
+                countjoker += 1
+                #print(countjoker)
+        else:
+        
+            for card in hand:
+                if hand[i] == card:
+                    countsum[i] += 1
+                
+    
+    counter = 0
+    for card in countsum:
+        if card == 2 and countjoker == 1:
+            counter += 1
+    
+    return counter == 4
+    
+
 
 def twopairs(hand):
     countsum = []
@@ -61,7 +114,7 @@ def twopairs(hand):
     
     return countresult
 
-def cardval(card):
+def cardval(card, joker):
     #check if numeric
     result = 0
     if card.isnumeric():
@@ -69,7 +122,10 @@ def cardval(card):
     elif card == "T":
         result = 10
     elif card == "J":
-        result = 11
+        if(joker):
+            result = 1
+        else:
+            result = 11
     elif card == "Q":
         result = 12
     elif card == "K":
@@ -78,10 +134,10 @@ def cardval(card):
         result = 14
     return result
 
-def sorthands(hands):
+def sorthands(hands, joker):
     
     if len(hands) == 1:
-        print("no sort")
+        #print("no sort")
         #print(hands)
         combind = [hands,bets]
         return hands
@@ -107,7 +163,7 @@ def sorthands(hands):
                         if carda == cardb:
                             continue
                         
-                        if cardval(carda) > cardval(cardb):
+                        if cardval(carda, joker) > cardval(cardb, joker):
                             
                             #print(str(hands[i]) + " - winner")
                             
@@ -145,7 +201,7 @@ threes = []
 doubles = []
 twos = []
 highs = []
-print(hands)
+#print(hands)
 
 for i in range(len(hands)):
     #print(i)
@@ -182,9 +238,9 @@ for i in range(len(hands)):
 #Combine lists after ordering
 #for hand in sorthands(highs):
 #    print(hand)
-sortedhands = sorthands(highs) + sorthands(twos) + sorthands(doubles) + sorthands(threes) + sorthands(house) + sorthands(fours) + sorthands(fives)
-for hand in sortedhands:
-    print(hand)
+sortedhands = sorthands(highs, False) + sorthands(twos, False) + sorthands(doubles, False) + sorthands(threes, False) + sorthands(house, False) + sorthands(fours, False) + sorthands(fives, False)
+#for hand in sortedhands:
+    #print(hand)
 counter = 1
 #sortedhands()
 for hand in sortedhands:
@@ -199,5 +255,54 @@ for hand in sortedhands:
 
 
 print("day 7 - 1")
+print(sum)
+print()
+
+sum = 0
+fives = []
+fours = []
+house = []
+threes = []
+doubles = []
+twos = []
+highs = []
+#print(hands)
+
+for i in range(len(hands)):
+    #print(i)
+    #five of a kind
+    #print(hands[i])
+    if(xofakindjoker(hands[i],5)):
+        fives.append([hands[i],bets[i]])
+        #print("5")
+    elif (xofakindjoker(hands[i],4)):
+        fours.append([hands[i],bets[i]])
+        #print("4")
+    elif ishousejoker(hands[i]) or ishouse(hands[i]):
+        house.append([hands[i],bets[i]])
+    elif (xofakindjoker(hands[i],3)):
+        threes.append([hands[i],bets[i]])
+        #print("3")
+    elif (twopairs(hands[i])):
+        doubles.append([hands[i],bets[i]])
+        #print("22")
+    elif (xofakindjoker(hands[i],2)):
+        twos.append([hands[i],bets[i]])
+        #print("2")
+    else:
+        highs.append([hands[i],bets[i]])
+        
+        
+sortedhands = sorthands(highs, True) + sorthands(twos, True) + sorthands(doubles, True) + sorthands(threes, True) + sorthands(house, True) + sorthands(fours, True) + sorthands(fives, True)
+for hand in sortedhands:
+    print(hand)
+counter = 1
+#sortedhands()
+for hand in sortedhands:
+    score = int(hand[1])*counter
+    sum = sum + score
+    counter += 1
+    
+print("day 7 - 2")
 print(sum)
 print()
