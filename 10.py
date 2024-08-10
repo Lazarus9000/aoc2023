@@ -30,7 +30,12 @@ def direction(input):
     if input == '|':
         return (0,-1)
 
-map = [['x'] * (len(inputs)) for x in range(len(inputs))]
+map = [['x'] * (len(inputs[0])) for x in range(len(inputs))]
+mask = [['x'] * (len(inputs[0])) for x in range(len(inputs))]
+
+
+print(map)
+
 start = (0,0)
 for i in range(len(inputs)):
     for j in range(len(inputs[i])):
@@ -56,6 +61,7 @@ for startheading in compass:
         
         steps = 1
         while not(startfound):
+            mask[next[0]][next[1]] = map[next[0]][next[1]]
             steps += 1
             nextfound = False
             nextpos = map[next[0]][next[1]]
@@ -139,3 +145,62 @@ print("day 10 - 1")
 result = (steps-1)/2
 print(result)
 print()
+
+def writemask(mask):
+    w = open("mask.txt", "w")
+    for i in range(len(mask)):
+        line = ""
+        for j in range(len(mask[i])):
+            line = line + mask[i][j]
+        line = line + "\n"
+        w.write(line)
+    w.close()
+
+count = 0
+
+#Based on crossing number algorithm
+#https://en.m.wikipedia.org/wiki/Point_in_polygon
+
+for i in range(len(mask)):
+    line = ""
+    for j in range(len(mask[i])):
+        if mask[i][j] == 'x':
+            xcount = 0
+            Ffound = False
+            Lfound = False
+            for k in range(j+1):
+                char = mask[i][k]
+                if char == '|':
+                    xcount += 1
+                
+                if char == 'F' or Ffound:
+                    #switch mode to look for J
+                    Ffound = True
+                    Lfound = False
+                    if char == 'J':
+                        xcount += 1
+                    
+                    if char == '7':
+                        Ffound = False
+                        
+                if char == 'L' or Lfound:
+                    Lfound = True
+                    Ffound = False
+                    if char == '7':
+                        xcount += 1
+                    
+                    if char == 'J':
+                        Lfound = False
+                    
+            
+            #print("xcount: " + str(xcount))
+            
+            if xcount % 2 == 0:
+                mask[i][j] = '0'
+            else:
+                mask[i][j] = '1'
+                count += 1
+            #input("next")
+writemask(mask)
+#print(mask)
+print(count)
