@@ -7,6 +7,7 @@ inputs = fileinput.split("\n")
 
 start = (0,0)
 check = True
+spacerows = []
 for i in range(len(inputs)):
     if(check):
         empty = all(char == '.' for char in inputs[i])
@@ -16,6 +17,7 @@ for i in range(len(inputs)):
             inputs.insert(i, inputs[i])
             #Used to skip checking the duplicate just made
             check = False
+            spacerows.append(i)
     else:
         check = True
         
@@ -24,6 +26,9 @@ check = True
 
 
 addedrows = 0
+spacesize = 1000000
+
+spacecols = []
 for j in range(len(inputs[0])):
     print(j)
     if(check):
@@ -37,7 +42,7 @@ for j in range(len(inputs[0])):
             print(j)
             for i in range(len(inputs)):
                 inputs[i] = inputs[i][:j] + "." + inputs[i][j:]
-            
+            spacecols.append(j)
             addedrows = addedrows + 1
             check = False
     else:
@@ -59,6 +64,7 @@ for j in range(len(inputs[0])-addedrows,len(inputs[0])):
             for i in range(len(inputs)):
                 inputs[i] = inputs[i][:j] + "." + inputs[i][j:]
             
+            spacecols.append(j)
             addedrows = addedrows + 1
             check = False
     else:
@@ -77,6 +83,7 @@ class pair:
     id1 = 0
     id2 = 0
     distance = 0
+    distance2 = 0
 
 countgalaxy = 0
 
@@ -99,23 +106,50 @@ for i in range(len(inputs)):
     #print(galaxy.y)
     #print("-")
 
+#Find pairs
 pairs = []
 for i in range(len(galaxies)):
     for j in range(i+1,len(galaxies)):
         found = pair()
         found.id1 = galaxies[i].id
         found.id2 = galaxies[j].id
+        #print("pair: " + str(i+1) + ", " + str(j+1))
         #distance
         found.distance = abs(galaxies[i].x-galaxies[j].x) + abs(galaxies[i].y-galaxies[j].y)
+        
+        #part 2 calc
+        found.distance2 = found.distance
+        miny = min(galaxies[i].y,galaxies[j].y)
+        maxy = max(galaxies[i].y,galaxies[j].y)
+        #print(str(miny) + ", " + str(maxy))
+        for space in spacerows:
+            #print(space)
+            if space in range(miny,maxy):
+                #print("found")
+                #deduct 2 as this is already counted in the "normal" distance calc
+                found.distance2 = found.distance2 + spacesize - 2
+            
+        minx = min(galaxies[i].x,galaxies[j].x)
+        maxx = max(galaxies[i].x,galaxies[j].x)    
+        #print(str(minx) + ", " + str(maxx))
+        for space in spacecols:
+            #print(space)
+            if space in range(minx,maxx):
+                #print("found")
+                found.distance2 = found.distance2 + spacesize - 2
+        #print("distance: " + str(found.distance))
+        #print("distance2: " + str(found.distance2))
         pairs.append(found)
         
 print("pairs found: " + str(len(pairs)))
 
 total = 0
+total2 = 0
 for pair in pairs:
     total = total + pair.distance
-    
+    total2 = total2 + pair.distance2
 print(total)
+print(total2)
 #for pair in pairs:
 #    print(str(pair.id1+1) + ", " + str(pair.id2+1) + " - dist: " + str(pair.distance))
     
